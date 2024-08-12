@@ -1,0 +1,42 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+}
+
+.container {
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 1800px;
+  min-width: 300px;
+}
+
+.container h1 {
+  text-align: center;
+}
+
+.container h1 span.version {
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin: 0 0.5rem;
+}
+
+.container p.message {
+  font-size: 0.9rem;
+}
+
+.container p.message span {
+  margin-right: 1rem;
+}
+
+.container ul {
+  padding: 1rem 2rem;
+  border: 1px solid gray;
+  border-radius: 0.25em;
+}

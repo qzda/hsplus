@@ -1,15 +1,23 @@
 html
   head
     title=title
+    link(
+      rel="icon"
+      type="image/x-icon"
+      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAFpJREFUOE9jZKAQMIL1t/z/z1DDCGGj80FyyACmDqqHOAOQDYdZADWUPAOQXEm+ARS7gPoGoEcncmhjiwWiXYCsGT26GRgYCAfiqAGocUNWIOLKTCjRSEGWBgDxgoOTx1ghLQAAAABJRU5ErkJggg=="
+    )
+    style
+      include index.css
   body
-    h1=title
-    p=message
-    ul
-      li
-        a(href="../") ..
-      if files
-        each file in files
-          li
-            a(
-              href='./' + file
-            ) #{file}
+    div.container
+      h1=title
+      p.message=message
+      ul
+        li
+          a(href="../") ..
+        if files
+          each file in files
+            li
+              a(
+                href='./' + file
+              ) #{file}
