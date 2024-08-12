@@ -1,14 +1,14 @@
 import process from "node:process";
 import chalk from "chalk";
 import { logHelp, logVersion } from "./logs";
+import { startServer } from "./server";
 
 function mian(args: string[]) {
-  if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
+  if (args.length === 0) {
+    startServer();
+  } else if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
     logVersion();
-  } else if (
-    args.length === 0 ||
-    (args.length === 1 && ["-h", "--help"].includes(args[0]))
-  ) {
+  } else if (args.length === 1 && ["-h", "--help"].includes(args[0])) {
     logHelp();
   } else {
     console.error(

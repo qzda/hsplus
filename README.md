@@ -1,6 +1,6 @@
 # hsplus
 
-http-server plus.
+CLI http-server plus.
 
 ## use
 

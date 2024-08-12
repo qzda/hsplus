@@ -1,0 +1,13 @@
+html
+  head
+    title=title
+  body
+    h1=title
+    p=message
+    if files
+      ul
+        each file in files
+          li
+            a(
+              href='/' + file
+            ) #{file}
