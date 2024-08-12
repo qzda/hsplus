@@ -1,0 +1,47 @@
+{
+  "name": "hsplus",
+  "version": "1.0.0",
+  "description": "http-server plus.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir=dist --target=node",
+    "build:pro": "bun build ./src/index.ts --outdir=dist --target=node --minify",
+    "dev": "bun run ./src/index.ts",
+    "dev:node": "npm run build; node ./dist/index.js",
+    "publish": "npm run build:pro; npm publish --access=public"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "exif": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^20.14.12",
+    "@types/exif": "^0.6.5"
+  },
+  "bin": {
+    "hsplus": "bin/index.js"
+  },
+  "readme": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qzda/hsplus.git"
+  },
+  "keywords": [
+    "http-server"
+  ],
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "qzda <qinzhidaoa@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qzda/hsplus/issues"
+  },
+  "homepage": "https://github.com/qzda/hsplus#readme"
+}
