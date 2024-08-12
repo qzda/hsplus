@@ -4,10 +4,12 @@ html
   body
     h1=title
     p=message
-    if files
-      ul
+    ul
+      li
+        a(href="../") ..
+      if files
         each file in files
           li
             a(
-              href='/' + file
+              href='./' + file
             ) #{file}
