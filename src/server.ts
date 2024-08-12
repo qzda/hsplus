@@ -1,8 +1,9 @@
 import chalk from "chalk";
 import express from "express";
-import { version } from "../package.json";
-import { readdir } from "node:fs/promises";
 import path from "node:path";
+import { readdir, readFile } from "node:fs/promises";
+
+import { version } from "../package.json";
 
 export function startServer() {
   const PORT = process.env.PORT || 3000;
@@ -16,22 +17,23 @@ export function startServer() {
 
   app.set("view engine", "pug");
   app.get("*", async (req, res) => {
-    // console.log(req);
     const urlPath = path.join(".", req.path);
-    const files = await readdir(urlPath);
+    try {
+      const files = await readdir(urlPath);
 
-    res.render("index", {
-      title: "hsplus",
-      message: `v${version} | files total: ${files.length}`,
-      files: files,
-    });
-  });
-
-  app.use(function (req, res) {
-    res.status(404).render("index", {
-      title: "hsplus",
-      message: "Sorry cant find that!",
-    });
+      res.render("index", {
+        title: "hsplus",
+        message: `v${version} | files total: ${files.length} | ${urlPath}`,
+        files,
+        version,
+        urlPath,
+      });
+    } catch (error) {
+      res.status(404).render("index", {
+        title: "hsplus",
+        message: error,
+      });
+    }
   });
 
   app.listen(PORT, () => {
