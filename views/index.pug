@@ -10,14 +10,20 @@ html
       include index.css
   body
     div.container
-      h1=title
+      h1.title=title
+        if version
+          span.version=version
       p.message=message
+        if urlPath
+          span.urlPath=urlPath
       ul
         li
+          span.index='0.'
           a(href="../") ..
         if files
-          each file in files
+          each file, index in files
             li
+              span.index=index+1+'.'
               a(
                 href='./' + file
-              ) #{file}
+              )=file
