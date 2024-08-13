@@ -10,7 +10,7 @@
     "dev": "bun run ./src/index.ts",
     "dev:watch": "bun run --watch ./src/index.ts",
     "dev:node": "npm run build; node ./dist/index.js",
-    "publish": "npm run build:pro; npm publish --access=public"
+    "p": "npm run build:pro; npm publish --access=public"
   },
   "dependencies": {
     "chalk": "^5.3.0",
