@@ -1,6 +1,6 @@
 {
   "name": "hsplus",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI http-server plus.",
   "main": "bin.js",
   "type": "module",
