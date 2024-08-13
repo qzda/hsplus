@@ -27,7 +27,7 @@
     "fs-extra": "^11.2.0"
   },
   "bin": {
-    "hsplus": "./bin/index.js"
+    "hsplus": "bin/index.js"
   },
   "readme": "",
   "repository": {
