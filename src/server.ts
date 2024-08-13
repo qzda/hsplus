@@ -5,22 +5,20 @@ import { readdir } from "node:fs/promises";
 
 import { version } from "../package.json";
 
-export function startServer(path?: string) {
-  const PORT = process.env.PORT || 3000;
+export function startServer(config: { path: string; port: string | number }) {
   const app = express();
 
   const HOME = process.env.HOME || process.env.USERPROFILE;
-  const PWD = process.cwd();
 
   app.use(
-    express.static(path || PWD, {
+    express.static(config.path, {
       dotfiles: "allow",
     })
   );
 
   app.set("view engine", "pug");
   app.get("*", async (req, res) => {
-    const urlPath = join(path || PWD, req.path);
+    const urlPath = join(config.path, req.path);
     const urlPathView = decodeURIComponent(
       HOME ? urlPath.replace(HOME, "~") : urlPath
     );
@@ -44,7 +42,9 @@ export function startServer(path?: string) {
     }
   });
 
-  app.listen(PORT, () => {
-    console.log(`Server ready: ${chalk.blue(`http://localhost:${PORT}/`)}`);
+  app.listen(config.port, () => {
+    console.log(
+      `Server ready: ${chalk.blue(`http://localhost:${config.port}/`)}`
+    );
   });
 }

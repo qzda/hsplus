@@ -1,24 +1,33 @@
 import process from "node:process";
-import chalk from "chalk";
 import { logHelp, logVersion } from "./logs";
 import { startServer } from "./server";
 
 function mian(args: string[]) {
-  if (args.length === 0) {
-    startServer();
-  } else if (
-    args.length === 1 &&
-    (args[0].startsWith("/") || args[0].startsWith("."))
-  ) {
-    startServer(args[0]);
-  } else if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
+  if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
     logVersion();
   } else if (args.length === 1 && ["-h", "--help"].includes(args[0])) {
     logHelp();
   } else {
-    console.error(
-      `The command ${chalk.bgRed(`hsplus ${args.join(" ")}`)} is invalid.`
-    );
+    let port: string | number = 3000;
+    let path = "";
+
+    if (args.indexOf("-p") > -1) {
+      port = args[args.indexOf("-p") + 1] || 3000;
+    }
+    if (args.indexOf("--port") > -1) {
+      port = args[args.indexOf("--port") + 1] || 3000;
+    }
+
+    if (args[0] && args[0][0] !== "-") {
+      path = args[0];
+    } else {
+      path = process.cwd();
+    }
+
+    startServer({
+      path,
+      port,
+    });
   }
 }
 
