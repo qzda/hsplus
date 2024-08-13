@@ -17,6 +17,8 @@ export function startServer(config: { path: string; port: string | number }) {
   );
 
   app.set("view engine", "pug");
+  // console.log(join(process.env.PWD || "", "../views"));
+  app.set("views", join(process.env.PWD || "", "../views"));
   app.get("*", async (req, res) => {
     const urlPath = join(config.path, req.path);
     const urlPathView = decodeURIComponent(
