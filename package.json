@@ -36,7 +36,8 @@
   ],
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "views"
   ],
   "publishConfig": {
     "access": "public"
