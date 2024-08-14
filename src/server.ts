@@ -4,24 +4,13 @@ import { join } from "node:path";
 import { readdir } from "node:fs/promises";
 
 import { version } from "../package.json";
-import { devLog } from "../utils";
-
-function getThisFilePath() {
-  const e = new Error();
-  let _path = e.stack?.split("\n")[1].trim() || "";
-  _path = _path.slice(_path.indexOf("(") + 1, _path.indexOf(":"));
-
-  return join(
-    _path.slice(_path.indexOf("(") + 1, _path.indexOf(":")),
-    "../../views/"
-  );
-}
+import { devLog, getThisFilePath, isDev } from "../utils";
 
 export function startServer(config: { path: string; port: string | number }) {
   const HOME = process.env.HOME || process.env.USERPROFILE;
   const app = express();
   app.set("view engine", "pug");
-  const viewPath = getThisFilePath();
+  const viewPath = join(getThisFilePath(), isDev ? "../../views" : "../views");
   devLog(`viewPath: ${viewPath}`);
   app.set("views", viewPath);
   app.use(
@@ -52,7 +41,7 @@ export function startServer(config: { path: string; port: string | number }) {
       title: "hsplus",
       message,
       files,
-      version: process.env.NODE_ENV === "dev" ? `${version} dev` : version,
+      version: isDev ? `${version} dev` : version,
       urlPath: urlPathView,
     };
 

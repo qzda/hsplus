@@ -1,6 +1,6 @@
 {
   "name": "hsplus",
-  "version": "1.0.6",
+  "version": "1.0.12",
   "description": "CLI http-server plus.",
   "main": "bin/main.js",
   "type": "module",
@@ -9,7 +9,7 @@
     "build:pro": "NODE_ENV=production bun build ./src/index.ts --outdir=dist --target=node",
     "dev": "NODE_ENV=dev bun run --watch ./src/index.ts",
     "dev:node": "node ./dist/index.js",
-    "p": "npm run build:pro --minify; npm publish --access=public",
+    "p": "npm publish --access=public",
     "p:dry": "npm run p -dry"
   },
   "dependencies": {
@@ -32,7 +32,8 @@
     "url": "git+https://github.com/qzda/hsplus.git"
   },
   "keywords": [
-    "http-server"
+    "http-server",
+    "cli"
   ],
   "files": [
     "dist",
