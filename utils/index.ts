@@ -19,3 +19,10 @@ export function delayResolve(ms: number) {
     }, ms);
   });
 }
+
+/** Only Dev mode log */
+export function devLog(...args: any[]) {
+  if (process.env.NODE_ENV === "dev") {
+    console.log(...args);
+  }
+}

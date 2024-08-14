@@ -4,45 +4,59 @@ import { join } from "node:path";
 import { readdir } from "node:fs/promises";
 
 import { version } from "../package.json";
+import { devLog } from "../utils";
+
+function getThisFilePath() {
+  const e = new Error();
+  let _path = e.stack?.split("\n")[1].trim() || "";
+  _path = _path.slice(_path.indexOf("(") + 1, _path.indexOf(":"));
+
+  return join(
+    _path.slice(_path.indexOf("(") + 1, _path.indexOf(":")),
+    "../../views/"
+  );
+}
 
 export function startServer(config: { path: string; port: string | number }) {
-  const app = express();
-
   const HOME = process.env.HOME || process.env.USERPROFILE;
-
+  const app = express();
+  app.set("view engine", "pug");
+  const viewPath = getThisFilePath();
+  devLog(`viewPath: ${viewPath}`);
+  app.set("views", viewPath);
   app.use(
     express.static(config.path, {
       dotfiles: "allow",
     })
   );
 
-  app.set("view engine", "pug");
-  // console.log(join(__dirname, "../views"));
-  // return;
-  app.set("views", join(__dirname, "../views"));
   app.get("*", async (req, res) => {
+    devLog(req.path);
+
     const urlPath = join(config.path, req.path);
     const urlPathView = decodeURIComponent(
       HOME ? urlPath.replace(HOME, "~") : urlPath
     );
-    try {
-      const files = await readdir(urlPath);
 
-      res.render("index", {
-        title: "hsplus",
-        message: `files total: ${files.length}`,
-        files,
-        version,
-        urlPath: urlPathView,
-      });
+    let files: string[] = [];
+    let message = "";
+
+    try {
+      files = await readdir(urlPath);
+      message = `files total: ${files.length}`;
     } catch (error) {
-      res.status(404).render("index", {
-        title: "hsplus",
-        message: error,
-        version,
-        urlPath: urlPathView,
-      });
+      message = error;
     }
+
+    const templateConfig = {
+      title: "hsplus",
+      message,
+      files,
+      version: process.env.NODE_ENV === "dev" ? `${version} dev` : version,
+      urlPath: urlPathView,
+    };
+
+    res.render("index", templateConfig);
   });
 
   app.listen(config.port, () => {
