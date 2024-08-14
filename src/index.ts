@@ -2,7 +2,7 @@ import process from "node:process";
 import { logHelp, logVersion } from "./logs";
 import { startServer } from "./server";
 
-function mian(args: string[]) {
+function main(args: string[]) {
   if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
     logVersion();
   } else if (args.length === 1 && ["-h", "--help"].includes(args[0])) {
@@ -50,4 +50,4 @@ process.argv.slice(2).forEach((arg) => {
 
 // console.log(args);
 
-mian(args);
+main(args);
