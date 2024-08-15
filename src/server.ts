@@ -10,7 +10,7 @@ export function startServer(config: { path: string; port: string | number }) {
   const HOME = process.env.HOME || process.env.USERPROFILE;
   const app = express();
   app.set("view engine", "pug");
-  const viewPath = join(getThisFilePath(), isDev ? "../../views" : "../views");
+  const viewPath = join(getThisFilePath(), "../../views");
   devLog(`viewPath: ${viewPath}`);
   app.set("views", viewPath);
   app.use(
