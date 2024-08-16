@@ -1,6 +1,7 @@
 import process from "node:process";
 import { logHelp, logVersion } from "./logs";
 import { startServer } from "./server";
+import { version } from "../package.json";
 
 function main(args: string[]) {
   if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
@@ -8,6 +9,8 @@ function main(args: string[]) {
   } else if (args.length === 1 && ["-h", "--help"].includes(args[0])) {
     logHelp();
   } else {
+    console.log(`hsplus v${version}`);
+
     let port: string | number = 3000;
     let path = "";
 

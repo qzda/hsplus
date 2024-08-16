@@ -50,7 +50,7 @@ export function startServer(config: { path: string; port: string | number }) {
 
   app.listen(config.port, () => {
     console.log(
-      `Server ready: ${chalk.blue(`http://localhost:${config.port}/`)}`
+      `Server ready: ${chalk.cyan(`http://localhost:${config.port}/`)}`
     );
   });
 }
