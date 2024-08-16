@@ -25,6 +25,12 @@ export function getThisFilePath() {
     .replaceAll(/\(|\)/g, "")
     .replace(/:\d+:\d+$/, "");
 
+  // On Windows, path start '/' will error
+  while (_path.includes(":") && _path[0] === "/") {
+    devLog(_path);
+    _path = _path.slice(1);
+  }
+
   return _path;
 }
 
