@@ -13,15 +13,10 @@
     "p:dry": "npm run p -dry"
   },
   "dependencies": {
-    "@qzda/prolog": "latest",
-    "express": "^4.19.2",
-    "pug": "^3.0.3"
+    "@qzda/prolog": "latest"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.14.12",
-    "@types/pug": "^2.0.10"
+    "@types/bun": "latest"
   },
   "bin": {
     "hsplus": "bin/index.js"
@@ -37,8 +32,7 @@
   ],
   "files": [
     "dist",
-    "bin",
-    "views"
+    "bin"
   ],
   "publishConfig": {
     "access": "public"

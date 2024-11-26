@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import path from "node:path";
 
 export function getFullPath(_path: string) {
@@ -10,6 +11,12 @@ export function getFullPath(_path: string) {
   }
 
   return _path;
+}
+
+export function getFileList(path: string) {
+  const files = readdirSync(path, { withFileTypes: true });
+
+  return files;
 }
 
 export function getThisFilePath() {

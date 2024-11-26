@@ -6,21 +6,22 @@ import { version } from "../package.json";
 function main(args: string[]) {
   if (args.length === 1 && ["-v", "--version"].includes(args[0])) {
     logVersion();
+    process.exit(0);
   } else if (args.length === 1 && ["-h", "--help"].includes(args[0])) {
     logHelp();
+    process.exit(0);
   } else {
     console.log(`hsplus v${version}`);
 
-    let port: string | number = 3000;
-    let path = "";
-
+    let port: number = 3000;
     if (args.indexOf("-p") > -1) {
-      port = args[args.indexOf("-p") + 1] || 3000;
+      port = +(args[args.indexOf("-p") + 1] || port);
     }
     if (args.indexOf("--port") > -1) {
-      port = args[args.indexOf("--port") + 1] || 3000;
+      port = +(args[args.indexOf("--port") + 1] || port);
     }
 
+    let path = "";
     if (args[0] && args[0][0] !== "-") {
       path = args[0];
     } else {
@@ -30,6 +31,7 @@ function main(args: string[]) {
     startServer({
       path,
       port,
+      enableLan: args.includes("--host"),
     });
   }
 }

@@ -1,17 +1,19 @@
 # hsplus
 
-CLI http-server plus.
+Quickly start a static file server. Smaller resource footprint, simpler to use.
 
-## use
+## Use
 
 ```bash
-npx hsplus
+npx hsplus ./
 # npx hsplus [path] [options]
 ```
 
-## dev
+## Development
+
+This project depends on [`Bun`](https://bun.sh).
 
 ```bash
 bun i
-bun dev:watch
+bun dev
 ```
