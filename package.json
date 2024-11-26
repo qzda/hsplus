@@ -13,7 +13,7 @@
     "p:dry": "npm run p -dry"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
+    "@qzda/prolog": "latest",
     "express": "^4.19.2",
     "pug": "^3.0.3"
   },

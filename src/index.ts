@@ -51,6 +51,4 @@ process.argv.slice(2).forEach((arg) => {
   }
 });
 
-// console.log(args);
-
 main(args);
