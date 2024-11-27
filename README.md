@@ -16,11 +16,12 @@ npx hsplus
 
 ## Options
 
-- `-p, --port`: Set server port (default: 3000)
-- `-h, --host`: Set server host (default: localhost)
-- `-o, --open`: Open browser automatically
-- `-v, --version`: Show version
-- `--help`: Show help
+Options:
+
+- `--host` Enable LAN access
+- `-p, --port` Port to use
+- `-h, --help` Display help
+- `-v, --version` Print the version
 
 ## Development
 
