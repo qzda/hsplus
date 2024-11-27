@@ -1,13 +1,26 @@
 # hsplus
 
-Quickly start a static file server. Smaller resource footprint, simpler to use.
+Quickly start a static file server. Smaller footprint, simpler to use.
 
-## Use
+## Features
+
+- Support text file preview
+- Support batch download
+
+## Usage
 
 ```bash
-npx hsplus ./
+npx hsplus
 # npx hsplus [path] [options]
 ```
+
+## Options
+
+- `-p, --port`: Set server port (default: 3000)
+- `-h, --host`: Set server host (default: localhost)
+- `-o, --open`: Open browser automatically
+- `-v, --version`: Show version
+- `--help`: Show help
 
 ## Development
 
