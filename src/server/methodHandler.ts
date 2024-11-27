@@ -19,7 +19,7 @@ export function methodHandlerGet(
 
   if (url === "/favicon.ico") {
     res.writeHead(304, { "Content-Type": "image/svg+xml" });
-    res.end(icons.logo.default);
+    res.end(icons.logo);
     return;
   }
 
@@ -47,9 +47,24 @@ export function methodHandlerGet(
         Head(),
         Body([
           Container([
-            Any("h1", `hsplus v${version}`, "my-2", [
-              { key: "style", value: "font-size: 2rem;" },
-            ]),
+            Div(
+              [
+                Any("h1", `hsplus v${version}`, "my-2", [
+                  { key: "style", value: "font-size: 2rem;" },
+                ]),
+                Any("a", icons.github, "link-dark", [
+                  {
+                    key: "href",
+                    value: `https://github.com/qzda/hsplus`,
+                  },
+                  {
+                    key: "target",
+                    value: "_blank",
+                  },
+                ]),
+              ],
+              "d-flex justify-content-between align-items-center"
+            ),
             Any(
               "ul",
               files.map((file, index) => {
