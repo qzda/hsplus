@@ -39,13 +39,16 @@ export function Div(innerHtml?: InnerHtmlType, className?: string) {
 export function Any(
   tag: string,
   innerHtml?: InnerHtmlType,
-  className?: string
+  className?: string,
+  attributes?: { key: string; value: string }[]
 ) {
   const _innerHtml = Array.isArray(innerHtml)
     ? innerHtml.join("")
     : innerHtml || "";
 
-  return `<${tag} class="${className || ""}">${_innerHtml}</${tag}>`;
+  return `<${tag} class="${className || ""}" ${attributes
+    ?.map(({ key, value }) => `${key}="${value}"`)
+    .join(" ")}>${_innerHtml}</${tag}>`;
 }
 
 export function Container(innerHtml?: InnerHtmlType, className?: string) {

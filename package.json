@@ -27,7 +27,7 @@
     "url": "git+https://github.com/qzda/hsplus.git"
   },
   "keywords": [
-    "http-server",
+    "http server",
     "cli"
   ],
   "files": [

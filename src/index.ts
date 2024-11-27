@@ -12,6 +12,7 @@ function main(args: string[]) {
     process.exit(0);
   } else {
     console.log(`hsplus v${version}`);
+    console.log();
 
     let port: number = 3000;
     if (args.indexOf("-p") > -1) {
