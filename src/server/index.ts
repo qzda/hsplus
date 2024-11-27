@@ -7,8 +7,9 @@ import { methodHandlerGet, methodHandlerPost } from "./methodHandler";
 
 export function startServer(config: ServerConfig) {
   const server = http.createServer((req, res) => {
-    const { method, url } = req;
-    devLog(prolog.green(`${new Date().toISOString()}`), method, url);
+    const { method = "", url = "" } = req;
+    devLog(prolog.green(`${new Date().toISOString()}`));
+    devLog(prolog.yellow(method), prolog.gray(url));
     switch (method) {
       case "GET":
         methodHandlerGet(req, res, config);
