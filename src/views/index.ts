@@ -15,7 +15,7 @@ export function Head(innerHtml?: InnerHtmlType) {
     ? innerHtml.join("")
     : innerHtml || "";
 
-  return `<head><meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> ${bootstrapCss}${_innerHtml}</head>`;
+  return `<head><meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>hsplus</title> ${bootstrapCss}${_innerHtml}</head>`;
 }
 
 export function Body(innerHtml?: InnerHtmlType, className?: string) {
@@ -25,7 +25,7 @@ export function Body(innerHtml?: InnerHtmlType, className?: string) {
 
   return `<body class="${
     className || ""
-  }" style="min-width: 600px">${_innerHtml}</body>`;
+  }" style="min-width: 300px">${_innerHtml}</body>`;
 }
 
 export function Div(innerHtml?: InnerHtmlType, className?: string) {
@@ -40,14 +40,19 @@ export function Any(
   tag: string,
   innerHtml?: InnerHtmlType,
   className?: string,
-  attributes?: { key: string; value: string }[]
+  attributes?: { key: string; value: string | boolean }[]
 ) {
   const _innerHtml = Array.isArray(innerHtml)
     ? innerHtml.join("")
     : innerHtml || "";
 
-  return `<${tag} class="${className || ""}" ${attributes
-    ?.map(({ key, value }) => `${key}="${value}"`)
+  return `<${tag} class="${className || ""}" ${(attributes || [])
+    .map(({ key, value }) => {
+      if (typeof value === "boolean") {
+        return value ? key : "";
+      }
+      return `${key}="${value}"`;
+    })
     .join(" ")}>${_innerHtml}</${tag}>`;
 }
 

@@ -5,7 +5,7 @@ import { ServerConfig } from "./type";
 import icons from "../assets/icon";
 import mime from "mime";
 import { getFileList, isTextFile, parseParams } from "../../utils";
-import { Any, Body, Container, Head, Html, Row, Col } from "../views";
+import { Any, Body, Container, Head, Html, Div } from "../views";
 import { version } from "../../package.json";
 
 export function methodHandlerGet(
@@ -44,46 +44,64 @@ export function methodHandlerGet(
       const html = Html([
         Head(),
         Body([
-          Container(Any("h1", `hsplus v${version}`), "mt-2"),
-          Container(
-            files.map((file, index) => {
-              const isDirectory = file.isDirectory();
-              return Row(
-                [
-                  Col(
-                    `<input type="checkbox" class="form-check-input" ${
-                      index === 0 ? "disabled" : ""
-                    } />
-                    ${index
-                      .toString()
-                      .padStart(files.length.toString().length, "0")} ${
-                      isDirectory ? "📁" : "📄"
-                    }`,
-                    "col-3 font-monospace"
-                  ),
-                  Col(
-                    Any(
-                      "a",
-                      file.name,
-                      "link-underline link-underline-opacity-0 link-underline-opacity-75-hover",
+          Container([
+            Any("h1", `hsplus v${version}`, "my-2", [
+              { key: "style", value: "font-size: 2rem;" },
+            ]),
+            Any(
+              "ul",
+              files.map((file, index) => {
+                const isDirectory = file.isDirectory();
+                return Any(
+                  "li",
+                  [
+                    Div(
                       [
-                        {
-                          key: "href",
-                          value: path.join(
-                            url,
-                            file.name,
-                            isDirectory ? "/" : ""
-                          ),
-                        },
-                      ]
-                    )
-                  ),
-                ],
-                `py-1 ${index % 2 === 1 ? "bg-secondary-subtle" : ""}`
-              );
-            }),
-            "border rounded"
-          ),
+                        Any("input", "", "form-check-input", [
+                          { key: "type", value: "checkbox" },
+                          {
+                            key: "disabled",
+                            value: index === 0,
+                          },
+                        ]),
+                        Any(
+                          "span",
+                          index
+                            .toString()
+                            .padStart(files.length.toString().length, "0"),
+                          "text-black-50 mx-2"
+                        ),
+                        isDirectory ? "📁" : "📄",
+                      ],
+                      "font-monospace text-nowrap"
+                    ),
+                    Div(
+                      Any(
+                        "a",
+                        file.name,
+                        "link-underline link-underline-opacity-0 link-underline-opacity-75-hover",
+                        [
+                          {
+                            key: "href",
+                            value: path.join(
+                              url,
+                              file.name,
+                              isDirectory ? "/" : ""
+                            ),
+                          },
+                        ]
+                      ),
+                      "flex-fill mx-2 overflow-x-hidden text-nowrap text-truncate"
+                    ),
+                  ],
+                  `py-1 px-2 d-flex ${
+                    index % 2 === 1 ? "bg-secondary-subtle" : ""
+                  }`
+                );
+              }),
+              "border rounded p-0"
+            ),
+          ]),
         ]),
       ]);
       res.writeHead(200, { "Content-Type": "text/html;" });
