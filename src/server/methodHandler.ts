@@ -49,21 +49,38 @@ export function methodHandlerGet(
           Container([
             Div(
               [
-                Any("h1", `hsplus v${version}`, "my-2", [
+                Any("h1", `hsplus v${version}`, "my-0", [
                   { key: "style", value: "font-size: 2rem;" },
                 ]),
-                Any("a", icons.github, "link-dark", [
-                  {
-                    key: "href",
-                    value: `https://github.com/qzda/hsplus`,
-                  },
-                  {
-                    key: "target",
-                    value: "_blank",
-                  },
-                ]),
+                Div(
+                  [
+                    Any(
+                      "button",
+                      icons.download,
+                      "btn btn-outline-primary p-1 d-flex justify-content-center align-items-center",
+                      [
+                        {
+                          key: "style",
+                          value: "width: 2rem; height: 1.5rem;",
+                        },
+                        { key: "onclick", value: "download()" },
+                      ]
+                    ),
+                    Any("a", icons.github, "link-dark", [
+                      {
+                        key: "href",
+                        value: `https://github.com/qzda/hsplus`,
+                      },
+                      {
+                        key: "target",
+                        value: "_blank",
+                      },
+                    ]),
+                  ],
+                  "d-flex align-items-center gap-2"
+                ),
               ],
-              "d-flex justify-content-between align-items-center"
+              "my-2 d-flex justify-content-between align-items-center"
             ),
             Any(
               "ul",
@@ -76,6 +93,7 @@ export function methodHandlerGet(
                       [
                         Any("input", "", "form-check-input", [
                           { key: "type", value: "checkbox" },
+                          { key: "index", value: index.toString() },
                           {
                             key: "disabled",
                             value: index === 0,
@@ -119,6 +137,28 @@ export function methodHandlerGet(
               "border rounded p-0"
             ),
           ]),
+          Any(
+            "script",
+            `function download() {
+              var indexs = $('input:checked').get().map(i => $(i).attr('index'))
+              var url = location.pathname + '?type=download&index=' + indexs.join(',')
+
+              fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+                }
+              }).then(res => res.blob()).then(blob => {
+                const a = document.createElement('a')
+                a.href = URL.createObjectURL(blob)
+                a.download = 'hsplus-' + indexs.join(',') + '.zip'
+                a.click()
+
+                // clear checked
+                $('input:checked').prop('checked', false)
+              })
+            }`
+          ),
         ]),
       ]);
       res.writeHead(200, { "Content-Type": "text/html;" });
