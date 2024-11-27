@@ -1,11 +1,13 @@
 import http from "node:http";
 import path from "node:path";
 import fs from "node:fs";
-import { ServerConfig } from "./type";
-import icons from "../assets/icon";
 import mime from "mime";
+import AdmZip from "adm-zip";
+
 import { getFileList, isTextFile, parseParams } from "../../utils";
 import { Any, Body, Container, Head, Html, Div } from "../views";
+import { ServerConfig } from "./type";
+import icons from "../assets/icon";
 import { version } from "../../package.json";
 
 export function methodHandlerGet(
@@ -16,7 +18,7 @@ export function methodHandlerGet(
   const { url = "" } = req;
 
   if (url === "/favicon.ico") {
-    res.writeHead(200, { "Content-Type": "image/svg+xml" });
+    res.writeHead(304, { "Content-Type": "image/svg+xml" });
     res.end(icons.logo.default);
     return;
   }
@@ -129,39 +131,40 @@ export function methodHandlerPost(
   res: http.ServerResponse,
   config: ServerConfig
 ) {
-  parseBody<Record<string, string>>(req).then((body) => {
-    console.log(body);
-  });
-
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(JSON.stringify(req));
-  return;
-
   const { url = "" } = req;
-
   const params = parseParams(url);
+  const reqUrl = new URL(url, `http://${req.headers.host}/`);
+  const dirPath = path.join(config.path, reqUrl.pathname);
 
   switch (params.type) {
     case "download":
-      const files = params.data.split(",");
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ files }));
+      const filesIndex = (params.index || "").split(",");
+      const filesPath = getFileList(dirPath)
+        .filter((_, index) => filesIndex.includes((index + 1).toString()))
+        .map((file) => path.join(dirPath, file.name));
+
+      const zip = new AdmZip();
+      filesPath.forEach((file) => {
+        if (fs.lstatSync(file).isDirectory()) {
+          zip.addLocalFolder(file, file.replace(dirPath, ""));
+        } else {
+          zip.addLocalFile(file);
+        }
+      });
+
+      res.writeHead(200, { "Content-Type": "application/zip" });
+      res.end(zip.toBuffer());
       break;
+
     default:
       res.writeHead(405, { "Content-Type": "text/plain;charset=utf-8" });
-      res.end(`${params.type} not supported`);
-      return;
+      res.end(
+        params.type
+          ? `type: ${params.type} not supported`
+          : "params.type is required"
+      );
+      break;
   }
-}
 
-function parseBody<T>(req: http.IncomingMessage): Promise<T> {
-  return new Promise((resolve, reject) => {
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-    req.on("end", () => {
-      resolve(JSON.parse(body) as T);
-    });
-  });
+  return;
 }

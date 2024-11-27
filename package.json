@@ -13,9 +13,11 @@
     "p:dry": "npm run p -dry"
   },
   "dependencies": {
-    "@qzda/prolog": "latest"
+    "@qzda/prolog": "latest",
+    "adm-zip": "^0.5.16"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.6",
     "@types/bun": "latest"
   },
   "bin": {
