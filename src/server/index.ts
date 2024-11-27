@@ -3,7 +3,7 @@ import prolog from "@qzda/prolog";
 
 import { devLog, getLocalIP } from "../../utils";
 import { ServerConfig } from "./type";
-import { methodHandlerGet } from "./methodHandler";
+import { methodHandlerGet, methodHandlerPost } from "./methodHandler";
 
 export function startServer(config: ServerConfig) {
   const server = http.createServer((req, res) => {
@@ -14,13 +14,15 @@ export function startServer(config: ServerConfig) {
         methodHandlerGet(req, res, config);
         break;
       case "POST":
-        res.end("post request not supported");
+        methodHandlerPost(req, res, config);
         break;
       default:
+        res.writeHead(405, { "Content-Type": "text/plain;charset=utf-8" });
         res.end(`${method} not supported`);
     }
   });
 
+  // server start
   server.listen(config.port, () => {
     console.log(
       `Server ready: ${prolog.underline(
@@ -41,10 +43,6 @@ export function startServer(config: ServerConfig) {
 
   server.on("error", (err) => {
     console.error(err);
-  });
-
-  server.on("close", () => {
-    console.log("Server closed");
   });
 
   return server;

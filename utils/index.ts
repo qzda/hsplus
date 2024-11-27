@@ -81,3 +81,12 @@ export function getLocalIP(): string {
   }
   return "localhost";
 }
+
+export function parseParams(url: string): Record<string, string> {
+  const params: Record<string, string> = {};
+  (url.split("?")[1] || "").split("&").forEach((item) => {
+    const [key, value] = item.split("=");
+    params[key] = value;
+  });
+  return params;
+}

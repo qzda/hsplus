@@ -4,7 +4,7 @@ import fs from "node:fs";
 import { ServerConfig } from "./type";
 import icons from "../assets/icon";
 import mime from "mime";
-import { getFileList, isTextFile } from "../../utils";
+import { getFileList, isTextFile, parseParams } from "../../utils";
 import { Any, Body, Container, Head, Html, Row, Col } from "../views";
 import { version } from "../../package.json";
 
@@ -104,4 +104,46 @@ export function methodHandlerGet(
       }
     }
   }
+}
+
+export function methodHandlerPost(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  config: ServerConfig
+) {
+  parseBody<Record<string, string>>(req).then((body) => {
+    console.log(body);
+  });
+
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(req));
+  return;
+
+  const { url = "" } = req;
+
+  const params = parseParams(url);
+
+  switch (params.type) {
+    case "download":
+      const files = params.data.split(",");
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ files }));
+      break;
+    default:
+      res.writeHead(405, { "Content-Type": "text/plain;charset=utf-8" });
+      res.end(`${params.type} not supported`);
+      return;
+  }
+}
+
+function parseBody<T>(req: http.IncomingMessage): Promise<T> {
+  return new Promise((resolve, reject) => {
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+    req.on("end", () => {
+      resolve(JSON.parse(body) as T);
+    });
+  });
 }
