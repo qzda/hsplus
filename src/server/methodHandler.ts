@@ -5,10 +5,9 @@ import mime from "mime";
 import AdmZip from "adm-zip";
 
 import { getFileList, isTextFile, parseParams } from "../../utils";
-import { Any, Body, Container, Head, Html, Div } from "../views";
 import { ServerConfig } from "./type";
 import icons from "../assets/icon";
-import { version } from "../../package.json";
+import { render404, renderIndex } from "./render";
 
 export function methodHandlerGet(
   req: http.IncomingMessage,
@@ -27,12 +26,8 @@ export function methodHandlerGet(
 
   // 404
   if (!fs.existsSync(fullPath)) {
-    const html = Html([
-      Head(),
-      Body([Container(Any("h1", `${url} not found`))]),
-    ]);
     res.writeHead(404, { "Content-Type": "text/html;" });
-    res.end(html);
+    res.end(render404(url));
     return;
   } else {
     // directory
@@ -43,126 +38,9 @@ export function methodHandlerGet(
           isDirectory: () => true,
         },
       ].concat(getFileList(fullPath));
-      const html = Html([
-        Head(),
-        Body([
-          Container([
-            Div(
-              [
-                Any("h1", `hsplus v${version}`, "my-0", [
-                  { key: "style", value: "font-size: 2rem;" },
-                ]),
-                Div(
-                  [
-                    Any(
-                      "button",
-                      icons.download,
-                      "btn btn-outline-primary p-1 d-flex justify-content-center align-items-center",
-                      [
-                        {
-                          key: "style",
-                          value: "width: 2rem; height: 1.5rem;",
-                        },
-                        { key: "onclick", value: "download()" },
-                      ]
-                    ),
-                    Any("a", icons.github, "link-dark", [
-                      {
-                        key: "href",
-                        value: `https://github.com/qzda/hsplus`,
-                      },
-                      {
-                        key: "target",
-                        value: "_blank",
-                      },
-                    ]),
-                  ],
-                  "d-flex align-items-center gap-2"
-                ),
-              ],
-              "my-2 d-flex justify-content-between align-items-center"
-            ),
-            Any(
-              "ul",
-              files.map((file, index) => {
-                const isDirectory = file.isDirectory();
-                return Any(
-                  "li",
-                  [
-                    Div(
-                      [
-                        Any("input", "", "form-check-input", [
-                          { key: "type", value: "checkbox" },
-                          { key: "index", value: index.toString() },
-                          {
-                            key: "disabled",
-                            value: index === 0,
-                          },
-                        ]),
-                        Any(
-                          "span",
-                          index
-                            .toString()
-                            .padStart(files.length.toString().length, "0"),
-                          "text-black-50 mx-2"
-                        ),
-                        isDirectory ? "📁" : "📄",
-                      ],
-                      "font-monospace text-nowrap"
-                    ),
-                    Div(
-                      Any(
-                        "a",
-                        file.name,
-                        "link-underline link-underline-opacity-0 link-underline-opacity-75-hover",
-                        [
-                          {
-                            key: "href",
-                            value: path.join(
-                              url,
-                              file.name,
-                              isDirectory ? "/" : ""
-                            ),
-                          },
-                        ]
-                      ),
-                      "flex-fill mx-2 overflow-x-hidden text-nowrap text-truncate"
-                    ),
-                  ],
-                  `py-1 px-2 d-flex ${
-                    index % 2 === 1 ? "bg-secondary-subtle" : ""
-                  }`
-                );
-              }),
-              "border rounded p-0"
-            ),
-          ]),
-          Any(
-            "script",
-            `function download() {
-              var indexs = $('input:checked').get().map(i => $(i).attr('index'))
-              var url = location.pathname + '?type=download&index=' + indexs.join(',')
 
-              fetch(url, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded'
-                }
-              }).then(res => res.blob()).then(blob => {
-                const a = document.createElement('a')
-                a.href = URL.createObjectURL(blob)
-                a.download = 'hsplus-' + indexs.join(',') + '.zip'
-                a.click()
-
-                // clear checked
-                $('input:checked').prop('checked', false)
-              })
-            }`
-          ),
-        ]),
-      ]);
       res.writeHead(200, { "Content-Type": "text/html;" });
-      res.end(html);
+      res.end(renderIndex(files, url));
       return;
     } else {
       // file
