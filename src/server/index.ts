@@ -11,8 +11,8 @@ export function startServers(config: ServerConfig) {
   // local server
   const localServer = http.createServer((req, res) => {
     const { method = "", url = "" } = req;
-    devLog(prolog.green(`${new Date().toISOString()}`));
-    devLog(prolog.yellow(method), prolog.gray(url));
+    console.log(prolog.green(`${new Date().toISOString()}`));
+    console.log(prolog.yellow(method), prolog.gray(url));
     switch (method) {
       case "GET":
         methodHandlerGet(req, res, config);
