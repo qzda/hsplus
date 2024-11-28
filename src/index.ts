@@ -1,6 +1,6 @@
 import process from "node:process";
 import { logHelp, logVersion } from "./logs";
-import { startServer } from "./server";
+import { startServers } from "./server";
 import { version } from "../package.json";
 
 function main(args: string[]) {
@@ -29,10 +29,21 @@ function main(args: string[]) {
       path = process.cwd();
     }
 
-    startServer({
+    const servers = startServers({
       path,
       port,
       enableLan: args.includes("--host"),
+    });
+
+    process.on("SIGINT", () => {
+      process.exit(0);
+    });
+
+    process.on("beforeExit", () => {
+      servers.forEach((server) => {
+        server.close();
+        console.log(`closing server ${server.address()}`);
+      });
     });
   }
 }
